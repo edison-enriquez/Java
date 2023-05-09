@@ -48,7 +48,7 @@ public class CRUD {
 
         try {
             // Conectar a la base de datos SQLite
-            conn = DriverManager.getConnection("jdbc:sqlite:Escuela.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:test.db");
 
             // ...
 
