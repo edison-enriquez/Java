@@ -1,0 +1,78 @@
+@startuml 02_clases_javafx
+!include estilo.iuml
+title Diagrama de clases - versión JavaFX
+
+class App {
+  + start(stage : Stage) : void
+  + {static} main(args : String[]) : void
+}
+App --|> javafx.application.Application
+
+class "estudiantes.fxml" as FXML <<Vista FXML>> {
+  txtNombre, txtCorreo, txtNota, txtBuscar
+  tblEstudiantes, colId, colNombre, colCorreo, colNota
+  lblEstado
+  btnGuardar → #onGuardar
+  btnActualizar → #onActualizar
+  btnEliminar → #onEliminar
+  btnLimpiar → #onLimpiar
+  txtBuscar → #onBuscar (onKeyReleased)
+}
+
+class EstudianteController <<Controlador>> {
+  - @FXML txtNombre : TextField
+  - @FXML tblEstudiantes : TableView<Estudiante>
+  - dao : EstudianteDAO
+  - estudiantes : ObservableList<Estudiante>
+  - initialize() : void
+  - onGuardar() : void
+  - onActualizar() : void
+  - onEliminar() : void
+  - onLimpiar() : void
+  - onBuscar() : void
+  - leerFormulario() : Estudiante
+  - cargarEstudiantes() : void
+}
+
+class Estudiante <<Modelo>> {
+  - id : int
+  - nombre : String
+  - correo : String
+  - nota : double
+  + getters / setters
+}
+
+interface EstudianteDAO <<DAO>> {
+  + insertar(e : Estudiante) : void
+  + listarTodos() : List<Estudiante>
+  + buscarPorNombre(texto : String) : List<Estudiante>
+  + actualizar(e : Estudiante) : void
+  + eliminar(id : int) : void
+}
+
+class EstudianteDAOSQLite {
+  - SQL_INSERTAR : String
+  - SQL_LISTAR : String
+  - mapearLista(rs : ResultSet) : List<Estudiante>
+}
+
+class DAOException {
+}
+DAOException --|> RuntimeException
+
+class ConexionSQLite <<utilidad>> {
+  - {static} URL : String = "jdbc:sqlite:estudiantes.db"
+  + {static} getConexion() : Connection
+  + {static} inicializarBaseDeDatos() : void
+}
+
+App ..> FXML : FXMLLoader.load()
+App ..> ConexionSQLite : inicializa BD
+FXML ..> EstudianteController : fx:controller
+EstudianteController --> EstudianteDAO : dao
+EstudianteController ..> Estudiante
+EstudianteDAOSQLite ..|> EstudianteDAO
+EstudianteDAOSQLite ..> ConexionSQLite
+EstudianteDAOSQLite ..> Estudiante
+EstudianteDAOSQLite ..> DAOException
+@enduml

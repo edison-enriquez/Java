@@ -1,0 +1,37 @@
+@startuml 05_patron_dao
+!include estilo.iuml
+title Patrón DAO (Data Access Object)
+
+class EstudianteController <<Cliente>>
+
+interface EstudianteDAO {
+  + insertar(e : Estudiante) : void
+  + listarTodos() : List<Estudiante>
+  + buscarPorNombre(texto : String) : List<Estudiante>
+  + actualizar(e : Estudiante) : void
+  + eliminar(id : int) : void
+}
+
+class EstudianteDAOSQLite <<implementado>> {
+  JDBC + PreparedStatement
+}
+class EstudianteDAOMySQL <<posible>> #F5F5F5 {
+  mismo contrato, otra BD
+}
+class EstudianteDAOMemoria <<posible>> #F5F5F5 {
+  ArrayList para pruebas
+}
+
+class Estudiante <<DTO / Modelo>>
+
+EstudianteController --> EstudianteDAO : solo conoce\nla interfaz
+EstudianteDAOSQLite ..|> EstudianteDAO
+EstudianteDAOMySQL ..|> EstudianteDAO
+EstudianteDAOMemoria ..|> EstudianteDAO
+EstudianteDAO ..> Estudiante : recibe / devuelve
+
+note bottom of EstudianteDAOSQLite
+  Único lugar del proyecto
+  donde se escribe SQL.
+end note
+@enduml

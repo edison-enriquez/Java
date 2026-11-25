@@ -1,0 +1,35 @@
+@startuml 04_secuencia_guardar
+!include estilo.iuml
+title Diagrama de secuencia - "Guardar estudiante"
+autonumber
+
+actor Usuario
+participant "Vista\n(FXML / JFrame)" as Vista
+participant "EstudianteController" as Ctrl
+participant "Estudiante" as Est
+participant "EstudianteDAOSQLite" as DAO
+participant "ConexionSQLite" as Con
+database "estudiantes.db" as DB
+
+Usuario -> Vista : escribe nombre, correo, nota\ny hace clic en "Guardar"
+Vista -> Ctrl : onGuardar()
+Ctrl -> Vista : leer txtNombre, txtCorreo, txtNota
+Ctrl -> Ctrl : leerFormulario()\n(validar datos)
+alt datos inválidos
+  Ctrl -> Vista : mostrarError("La nota debe estar entre 0.0 y 5.0")
+else datos válidos
+  Ctrl -> Est ** : new Estudiante(nombre, correo, nota)
+  Ctrl -> DAO : insertar(estudiante)
+  DAO -> Con : getConexion()
+  Con --> DAO : Connection
+  DAO -> DB : INSERT INTO estudiante ... VALUES (?, ?, ?)
+  DB --> DAO : id generado
+  DAO -> Est : setId(id)
+  DAO --> Ctrl : (fin)
+  Ctrl -> DAO : listarTodos()
+  DAO -> DB : SELECT ... ORDER BY nombre
+  DB --> DAO : ResultSet
+  DAO --> Ctrl : List<Estudiante>
+  Ctrl -> Vista : mostrar lista en la tabla\ny "Estudiante guardado con id N"
+end
+@enduml

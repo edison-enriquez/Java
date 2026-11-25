@@ -1,0 +1,47 @@
+@startuml 01_arquitectura_capas
+!include estilo.iuml
+title Arquitectura MVC + DAO (paquetes de com.ap22)
+
+package "vista" as V #FDF2E9 {
+  [JavaFX: estudiantes.fxml\n(SceneBuilder)] as VFX
+  [Swing: VentanaEstudiantes\n(JFrame)] as VSW
+}
+
+package "controlador" as C #EAF2FB {
+  [EstudianteController] as CT
+}
+
+package "modelo" as M #EAF7EA {
+  [Estudiante] as EST
+}
+
+package "dao" as D #F3E9F9 {
+  [EstudianteDAO\n<<interface>>] as IDAO
+  [EstudianteDAOSQLite] as DAOSQL
+  [DAOException] as DEX
+}
+
+package "db" as DB #F2F2F2 {
+  [ConexionSQLite] as CON
+}
+
+database "estudiantes.db\n(SQLite)" as SQLITE
+
+VFX ..> CT : eventos\n(onAction)
+VSW ..> CT : eventos\n(ActionListener)
+CT --> IDAO : usa
+CT --> EST : crea / lee
+DAOSQL ..|> IDAO
+DAOSQL --> EST : mapea filas
+DAOSQL --> CON : pide conexión
+DAOSQL ..> DEX : lanza
+CON --> SQLITE : JDBC
+
+note right of CT
+  El controlador depende de la
+  INTERFAZ EstudianteDAO, no de
+  la clase concreta. Así se puede
+  cambiar la base de datos sin
+  tocar el controlador.
+end note
+@enduml

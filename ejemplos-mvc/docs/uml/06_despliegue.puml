@@ -1,0 +1,28 @@
+@startuml 06_despliegue
+!include estilo.iuml
+title Diagrama de despliegue
+
+node "Computador del usuario" {
+  node "JVM (JDK 21)" {
+    artifact "mvc-javafx-sqlite\n(o mvc-swing-sqlite)" as APP
+    artifact "javafx-controls\njavafx-fxml\n(solo JavaFX)" as FX
+    artifact "sqlite-jdbc.jar\n(driver JDBC)" as DRV
+  }
+  file "estudiantes.db" as DBF
+}
+
+node "Maven Central\n(repo.maven.apache.org)" as MC {
+  artifact "dependencias del pom.xml" as DEPS
+}
+
+APP --> FX : usa
+APP --> DRV : java.sql (JDBC)
+DRV --> DBF : lee / escribe\n(archivo local)
+DEPS ..> APP : mvnw descarga\nen la 1.ª compilación
+
+note right of DBF
+  SQLite no necesita servidor:
+  toda la base de datos es
+  este único archivo.
+end note
+@enduml

@@ -1,0 +1,77 @@
+@startuml 03_clases_swing
+!include estilo.iuml
+title Diagrama de clases - versión Swing
+
+class Main {
+  + {static} main(args : String[]) : void
+}
+
+class VentanaEstudiantes <<Vista>> {
+  - txtNombre, txtCorreo, txtNota, txtBuscar : JTextField
+  - btnGuardar, btnActualizar, btnEliminar, btnLimpiar : JButton
+  - tblEstudiantes : JTable
+  - modeloTabla : DefaultTableModel
+  - lblEstado : JLabel
+  + mostrarEstudiantes(lista : List<Estudiante>) : void
+  + getIdSeleccionado() : int
+  + cargarFilaSeleccionadaEnFormulario() : void
+  + limpiarFormulario() : void
+  + mostrarError(msg : String) : void
+  + confirmar(pregunta : String) : boolean
+  + setEstado(texto : String) : void
+  + getBtnGuardar() : JButton
+  + ...getters de componentes
+}
+VentanaEstudiantes --|> javax.swing.JFrame
+
+class EstudianteController <<Controlador>> {
+  - vista : VentanaEstudiantes
+  - dao : EstudianteDAO
+  + EstudianteController(vista, dao)
+  + iniciar() : void
+  - registrarEventos() : void
+  - onGuardar() : void
+  - onActualizar() : void
+  - onEliminar() : void
+  - leerFormulario() : Estudiante
+  - cargarEstudiantes() : void
+}
+
+class Estudiante <<Modelo>> {
+  - id : int
+  - nombre : String
+  - correo : String
+  - nota : double
+}
+
+interface EstudianteDAO <<DAO>> {
+  + insertar(e : Estudiante) : void
+  + listarTodos() : List<Estudiante>
+  + buscarPorNombre(texto : String) : List<Estudiante>
+  + actualizar(e : Estudiante) : void
+  + eliminar(id : int) : void
+}
+
+class EstudianteDAOSQLite
+class ConexionSQLite <<utilidad>> {
+  + {static} getConexion() : Connection
+  + {static} inicializarBaseDeDatos() : void
+}
+
+Main ..> VentanaEstudiantes : crea
+Main ..> EstudianteDAOSQLite : crea
+Main ..> EstudianteController : crea e inicia
+EstudianteController --> VentanaEstudiantes : vista
+EstudianteController --> EstudianteDAO : dao
+EstudianteController ..> Estudiante
+VentanaEstudiantes ..> Estudiante : muestra
+EstudianteDAOSQLite ..|> EstudianteDAO
+EstudianteDAOSQLite ..> ConexionSQLite
+EstudianteDAOSQLite ..> Estudiante
+
+note bottom of EstudianteController
+  Inyección de dependencias:
+  recibe la vista y el DAO
+  por el constructor.
+end note
+@enduml

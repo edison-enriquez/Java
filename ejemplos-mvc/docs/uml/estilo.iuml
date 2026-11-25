@@ -1,0 +1,20 @@
+' Estilo común para todos los diagramas
+!pragma layout smetana
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam roundCorner 8
+skinparam ArrowColor #444444
+skinparam ClassBackgroundColor #FFFFFF
+skinparam ClassBorderColor #2B579A
+skinparam ClassHeaderBackgroundColor #DDE8F6
+skinparam PackageBorderColor #7A7A7A
+skinparam NoteBackgroundColor #FFF8DC
+skinparam NoteBorderColor #C9A227
+skinparam ParticipantBackgroundColor #DDE8F6
+skinparam ParticipantBorderColor #2B579A
+skinparam DatabaseBackgroundColor #E8F5E9
+skinparam DatabaseBorderColor #2E7D32
+skinparam SequenceLifeLineBorderColor #7A7A7A
+hide empty members
