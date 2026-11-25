@@ -1,0 +1,19 @@
+# Salida de compilación de Maven
+target/
+
+# Base de datos local que se genera al ejecutar la app
+*.db
+
+# Archivos de IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+
+# Archivos temporales de Office
+~$*
+
+# Configuración local de VS Code (rutas propias de cada equipo)
+.vscode/
