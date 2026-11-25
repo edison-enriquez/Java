@@ -47,7 +47,7 @@ En la carpeta [`docs`](docs) están:
 
 - `Guia_MVC_DAO_SQLite.docx`: guía paso a paso con capturas de pantalla.
 - `Presentacion_MVC_DAO_SQLite.pptx`: diapositivas para la clase.
-- `uml/`: diagramas UML (fuente PlantUML `.puml` + imagen `.png`).
+- `uml/`: diagramas UML (fuente PlantUML `.puml` + imagen `.png`). Para regenerar los PNG: `java -jar plantuml.jar docs/uml/*.puml` (no requiere Graphviz: usan `!pragma layout smetana`).
 - `capturas/`: capturas de VS Code, SceneBuilder y de las aplicaciones.
 
 ## Estructura de paquetes (igual en ambos proyectos)
